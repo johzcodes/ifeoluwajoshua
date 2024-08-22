@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import '../styles/style.css'
 import emoji from '../assets/emoji.png'
+import IMG_1 from '../assets/IMG_1.jpg'
 
 
 const Intro = () => {
@@ -20,6 +21,8 @@ const Intro = () => {
               <div className="flex mb-4 items-center">
               <h1 className="font-bold  text-yellow-500 text-4xl">Hello Mate,  </h1>
               <img className="w-10 h-10" src={emoji} alt="" />
+              {/* <img className="w-10 h-10" src={IMG_1} alt="" /> */}
+
               </div>
 
               <h1 className="me font-bold mb-4"> I'm Ifeoluwa Joshua a Web Designer and a Full Stack <span>Web Developer</span></h1>
@@ -28,7 +31,8 @@ const Intro = () => {
                 <p className="text-xl">-"Hi, I am Joshua a Web Developer based in Lagos, Nigeria. I help brands turn their ideas into high quality products ..."</p>
             </div>
             {/* <div className='quotes'>
-                <h2 className="me">H A FULL STACK WEB DEVELOPER BASED IN NIGERIA</h2>
+              <img src={IMG_1} alt="" />
+
             </div> */}
         </div>
         <form className="newsletter">

@@ -11,10 +11,11 @@ body{
     text-decoration: underline;
     color: rgb(177, 27, 177); /* Optional: Change color for active link */
     font-weight: bold;
+    font-size: 20px;
   }
   
   .inactive-link {
-    text-decoration: none;
+    text-decoration: underline;
     color: black; /* Optional: Default color for inactive links */
   }
   
