@@ -50,6 +50,11 @@
         padding: 5px 15px;
     }
 }
+.submit{
+  font-family: "Montez", cursive;
+  font-size: 2.5em;
+
+}
 
 .intro{
 
@@ -133,7 +138,7 @@ justify-content: space-evenly;
 }
 
 .loading-video{
-  // position: absolute;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;

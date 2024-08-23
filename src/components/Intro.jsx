@@ -6,11 +6,38 @@ import IMG_1 from '../assets/IMG_1.jpg'
 
 const Intro = () => {
   const [email, setEmail] = useState('')
+  const [loading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const handleEmail = async (e) => {
-    e.preventDefault
-    console.log(email, ';gy')
-  }
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+    setSuccess(null);  // Reset success message
+
+    try {
+      const response = await fetch('https://portfolio-backend-ce6g.onrender.com/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({email}),
+      });
+
+      if (!response.ok) {
+        throw new Error('Something went wrong with the submission');
+      }
+
+      // Reset the form fields after successful submission
+      setEmail('');
+      setSuccess('Thanks for Subscribing!');  // Set success message
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <>
       <section>
@@ -35,10 +62,14 @@ const Intro = () => {
 
             </div> */}
         </div>
-        <form className="newsletter">
-          <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email Address...' className='email'/>
-          <button className='subsribe' onSubmit={handleEmail} type="submit">Connect With Me</button>
+        <form onSubmit={handleEmail} className="newsletter">
+          <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email Address...' className='email'/>
+          <button type="submit" className="p-2 px-12 font-bold mt-4 text-white bg-pink-700" disabled={loading}>
+            {loading ? 'Subscribing...' : 'Subscribe To My Newsletter'}
+          </button>
         </form>
+        {success && <p className="text-green-500 mt-4">{success}</p>}  {/* Display success message */}
+        {error && <p className="text-red-500 mt-4">{error}</p>}  {/* Display error message */}
       </section>
     </>
   )
