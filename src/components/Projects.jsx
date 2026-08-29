@@ -1,74 +1,126 @@
-import { useState } from "react";
-import features from "../data/data.json";
-import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
-import { Button } from "@radix-ui/themes";
+import Section from "./Section";
+import Reveal from "./Reveal";
+import { FiArrowUpRight } from "react-icons/fi";
+import { projects, otherProjects } from "../data/projects";
 
-const Projects = () => {
-  const infos = features.data;
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % infos.length);
-  };
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + infos.length) % infos.length);
-  };
-
-  const currentProject = infos[currentIndex];
-
+function DetailRow({ label, children }) {
   return (
-    <div className="bg-gray-50 dark:bg-black text-gray-800 dark:text-white md:px-20 px-6 py-16">
-      <section className="flex flex-col items-center justify-center gap-6">
-        <h3 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-transparent bg-clip-text text-center">
-          Featured Projects
-        </h3>
-
-        <p className="text-gray-600 dark:text-gray-400 text-center max-w-xl text-sm md:text-base">
-          Explore some of our recent case studies showcasing modern design and
-          performance-driven development.
-        </p>
-
-        <div className="relative w-full max-w-5xl overflow-hidden rounded-none shadow-lg">
-          <img
-            src={currentProject.imgurl}
-            alt={currentProject.title || "Project Image"}
-            className="w-full h-80 md:h-[28rem] object-cover transition-all duration-500"
-          />
-
-          <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent px-6 py-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <ArrowLeftIcon
-                onClick={handlePrev}
-                className="w-6 h-6 cursor-pointer text-white hover:text-pink-400 transition"
-              />
-              <span className="text-white text-sm">{`${currentIndex + 1} / ${infos.length}`}</span>
-              <ArrowRightIcon
-                onClick={handleNext}
-                className="w-6 h-6 cursor-pointer text-white hover:text-pink-400 transition"
-              />
-            </div>
-
-            <div className="text-white text-sm md:text-base">
-              <h4 className="font-semibold">{currentProject.title}</h4>
-              <p className="opacity-80">{currentProject.category || "N/A"}</p>
-            </div>
-
-            <Button asChild className="bg-white text-black text-xs hover:bg-pink-500 hover:text-white transition font-medium">
-              <a
-                href={currentProject.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs"
-              >
-                View Project
-              </a>
-            </Button>
-          </div>
-        </div>
-      </section>
+    <div className="grid gap-1 sm:grid-cols-[7rem_1fr] sm:gap-4">
+      <dt className="section-label pt-0.5">{label}</dt>
+      <dd className="text-sm leading-relaxed text-ink-muted">{children}</dd>
     </div>
   );
-};
+}
 
-export default Projects;
+function ProjectCard({ project, priority }) {
+  return (
+    <article className="overflow-hidden rounded-xl border border-line bg-surface">
+      <a
+        href={project.live}
+        target="_blank"
+        rel="noreferrer"
+        className="group block aspect-[16/10] overflow-hidden border-b border-line"
+      >
+        <img
+          src={project.image}
+          alt={`${project.name} — screenshot of the live site`}
+          width={1366}
+          height={854}
+          loading={priority ? "eager" : "lazy"}
+          className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+      </a>
+
+      <div className="p-6 sm:p-8">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <h3 className="text-xl font-semibold text-ink">{project.name}</h3>
+          <span className="font-mono text-xs text-ink-faint">{project.year}</span>
+        </div>
+        <p className="mt-1 text-sm text-ink-muted">{project.tagline}</p>
+
+        <dl className="mt-6 space-y-4">
+          <DetailRow label="Problem">{project.problem}</DetailRow>
+          <DetailRow label="Built">{project.build}</DetailRow>
+          {project.engineering ? (
+            <DetailRow label="Engineering">{project.engineering}</DetailRow>
+          ) : null}
+        </dl>
+
+        <ul className="mt-6 flex flex-wrap gap-2">
+          {project.stack.map((tech) => (
+            <li
+              key={tech}
+              className="rounded border border-line px-2 py-0.5 font-mono text-xs text-ink-faint"
+            >
+              {tech}
+            </li>
+          ))}
+        </ul>
+
+        <a
+          href={project.live}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline"
+        >
+          Visit live site
+          <FiArrowUpRight aria-hidden="true" />
+        </a>
+      </div>
+    </article>
+  );
+}
+
+export default function Projects() {
+  return (
+    <Section id="projects" index={3} title="Selected projects">
+      <div className="grid gap-8 lg:grid-cols-2">
+        {projects.map((project, i) => (
+          <Reveal key={project.name} delay={(i % 2) * 80}>
+            <ProjectCard project={project} priority={i === 0} />
+          </Reveal>
+        ))}
+      </div>
+
+      <Reveal className="mt-14">
+        <h3 className="section-label mb-4">Also built</h3>
+        <ul className="divide-y divide-line border-y border-line">
+          {otherProjects.map((item) => (
+            <li
+              key={item.name}
+              className="flex flex-col gap-1 py-4 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <div>
+                <a
+                  href={item.live}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm font-medium text-ink hover:text-accent"
+                >
+                  {item.name}
+                  <FiArrowUpRight className="ml-1 inline h-3.5 w-3.5" aria-hidden="true" />
+                </a>
+                <p className="text-sm text-ink-muted">{item.detail}</p>
+              </div>
+              <span className="font-mono text-xs text-ink-faint">
+                {item.stack.join(" · ")}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-4 text-sm text-ink-muted">
+          More on{" "}
+          <a
+            href="https://github.com/ifeoluwajohz"
+            target="_blank"
+            rel="noreferrer"
+            className="text-accent hover:underline"
+          >
+            GitHub
+          </a>
+          .
+        </p>
+      </Reveal>
+    </Section>
+  );
+}

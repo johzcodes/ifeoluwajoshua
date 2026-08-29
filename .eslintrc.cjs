@@ -13,6 +13,9 @@ module.exports = {
   plugins: ['react-refresh'],
   rules: {
     'react/jsx-no-target-blank': 'off',
+    // This is a plain-JavaScript project; we do not use runtime PropTypes.
+    'react/prop-types': 'off',
+    'react/no-unescaped-entities': 'off',
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
